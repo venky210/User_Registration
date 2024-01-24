@@ -5,9 +5,14 @@ from app.forms import *
 
 from app.models import *
 
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
+
+from django.urls import reverse
 
 from django.core.mail import send_mail
+
+from django.contrib.auth import authenticate,login
+
 
 
 
@@ -34,3 +39,29 @@ def registration(request):
 
 
 
+def home_page(request):
+    if request.session.get('username'):
+        un=request.session.get('username')
+        d={'username':un}
+        return render(request,'home_page.html',d)
+    return render(request,'home_page.html')
+
+
+
+
+
+
+
+def user_login(request):
+    if request.method=='POST':
+        un=request.POST['un']
+        pw=request.POST['pw']
+        AUO=authenticate(username=un,password=pw)
+        if AUO and AUO.is_active:
+            login(request,AUO)
+            request.session['username']=un
+            return HttpResponseRedirect(reverse('home_page'))
+        else:
+            return HttpResponse('none')
+        
+    return render (request,'user_login.html')
