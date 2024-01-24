@@ -9,6 +9,8 @@ from django.http import HttpResponse
 
 from django.core.mail import send_mail
 
+
+
 def registration(request):
     UFO=userform()
     PFO=Profileform()
@@ -29,3 +31,6 @@ def registration(request):
         else:
             return HttpResponse('invaild data')
     return render(request,'registration.html',d)
+
+
+
